@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+import peewee
+from flask import Flask, jsonify, request
 from flask import render_template, send_from_directory, abort
 import os
 
@@ -19,6 +20,7 @@ def _db_close(exc):
     if not db.is_closed():
         db.close()
 
+
 @app.route("/imgs/<image_name>")
 def get_image(image_name):
     try:
@@ -27,8 +29,8 @@ def get_image(image_name):
         abort(404)
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def index():
+    return app.send_static_file("frontend/axios.html")
 
 @app.route("/product")
 def product_list():
@@ -37,6 +39,15 @@ def product_list():
         print(r)
     return jsonify({'products':list(results)})
 
+@app.route("/delete", methods=["POST"])
+def delete_product():
+    pid = request.get_json()
+    try:
+        product = Product.get(Product.id == pid["id"])
+        product.delete_instance()
+    except peewee.DoesNotExist:
+        return jsonify({'response': 'error'})
+    return jsonify({'response': 'success'})
 
 if __name__ == "__main__":
     """

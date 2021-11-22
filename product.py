@@ -50,7 +50,7 @@ def list_item():
         print(r)
 
 if __name__ == "__main__":
-    #new_db()
-    list_item()
+    new_db()
+    #list_item()
     #addProduct()
     #delProduct("003")
