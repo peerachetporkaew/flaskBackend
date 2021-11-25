@@ -11,4 +11,4 @@ COPY . /app
 
 ENTRYPOINT [ "python" ]
 
-CMD ["01_helloworld.py"]
+CMD ["08_app.py"]
